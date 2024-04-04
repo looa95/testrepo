@@ -1,0 +1,447 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2758
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red183\green111\blue179;\red24\green24\blue24;\red193\green193\blue193;
+\red202\green202\blue202;\red70\green137\blue204;\red89\green138\blue67;\red212\green214\blue154;\red194\green126\blue101;
+\red167\green197\blue152;\red140\green211\blue254;\red67\green192\blue160;\red205\green173\blue106;}
+{\*\expandedcolortbl;;\cssrgb\c77255\c52549\c75294;\cssrgb\c12157\c12157\c12157;\cssrgb\c80000\c80000\c80000;
+\cssrgb\c83137\c83137\c83137;\cssrgb\c33725\c61176\c83922;\cssrgb\c41569\c60000\c33333;\cssrgb\c86275\c86275\c66667;\cssrgb\c80784\c56863\c47059;
+\cssrgb\c70980\c80784\c65882;\cssrgb\c61176\c86275\c99608;\cssrgb\c30588\c78824\c69020;\cssrgb\c84314\c72941\c49020;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww59960\viewh32220\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 from\cf4 \strokec4  ast \cf2 \strokec2 import\cf4 \strokec4  arg\cb1 \
+\cf2 \cb3 \strokec2 from\cf4 \strokec4  datetime \cf2 \strokec2 import\cf4 \strokec4  datetime\cb1 \
+\cf2 \cb3 \strokec2 import\cf4 \strokec4  os\cb1 \
+\cf2 \cb3 \strokec2 from\cf4 \strokec4  signal \cf2 \strokec2 import\cf4 \strokec4  pause\cb1 \
+\cf2 \cb3 \strokec2 import\cf4 \strokec4  subprocess\cb1 \
+\cf2 \cb3 \strokec2 from\cf4 \strokec4  itertools \cf2 \strokec2 import\cf4 \strokec4  product\cb1 \
+\cf2 \cb3 \strokec2 import\cf4 \strokec4  hashlib\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 DEL_LOCAL_SIMS \cf5 \strokec5 =\cf4 \strokec4  \cf6 \strokec6 True\cf4 \cb1 \strokec4 \
+\cb3 just_testing\cf5 \strokec5 =\cf6 \strokec6 False\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 # Auto detect user name\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 username \cf5 \strokec5 =\cf4 \strokec4  os.getlogin()\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf8 \cb3 \strokec8 print\cf4 \strokec4 (username)\cb1 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 # *** CLUSTER ***\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 run_cluster\cf5 \strokec5 =\cf6 \strokec6 True\cf4 \cb1 \strokec4 \
+\cb3 cluster_save_DB\cf5 \strokec5 =\cf6 \strokec6 False\cf4 \cb1 \strokec4 \
+\cb3 slurm_partition\cf5 \strokec5 =\cf9 \strokec9 ''\cf4 \strokec4  \cf7 \strokec7 #if empty, no partition is used\cf4 \cb1 \strokec4 \
+\cb3 slurm_max_mem\cf5 \strokec5 =\cf9 \strokec9 '30GB'\cf4 \cb1 \strokec4 \
+\cb3 slurm_max_time\cf5 \strokec5 =\cf9 \strokec9 '24:00:00'\cf4 \strokec4  \cf7 \strokec7 #hh:mm:ss\cf4 \cb1 \strokec4 \
+\cb3 slurm_n_tasks\cf5 \strokec5 =\cf10 \strokec10 1\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 if\cf4 \strokec4  username\cf5 \strokec5 ==\cf9 \strokec9 'fehrenbach'\cf4 \strokec4 :\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     slurm_email\cf5 \strokec5 =\cf9 \strokec9 'thomas.fehrenbach@hhi.fraunhofer.de'\cf4 \cb1 \strokec4 \
+\cb3     sge_logsDir\cf5 \strokec5 =\cf9 \strokec9 "/data/cluster/users/fehrenbach/ns-3/logs/"\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 elif\cf4 \strokec4  username\cf5 \strokec5 ==\cf9 \strokec9 'ortizabrego'\cf4 \strokec4 :\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     slurm_email \cf5 \strokec5 =\cf4 \strokec4  \cf9 \strokec9 'luis.abrego@hhi.fraunhofer.de'\cf4 \cb1 \strokec4 \
+\cb3     sge_logsDir\cf5 \strokec5 =\cf9 \strokec9 "/data/cluster/users/ortizabrego/ns-3/logs/"\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 else\cf4 \strokec4 : \cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     \cf8 \strokec8 print\cf4 \strokec4 (\cf9 \strokec9 'ERROR: USER NOT FOUND'\cf4 \strokec4 )\cb1 \
+\cb3     \cf8 \strokec8 exit\cf4 \strokec4 ()\cb1 \
+\cb3 skip_build\cf5 \strokec5 =\cf6 \strokec6 False\cf4 \cb1 \strokec4 \
+\cb3 run_local\cf5 \strokec5 =\cf6 \strokec6 not\cf4 \strokec4  run_cluster\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 #get current path\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 cwd \cf5 \strokec5 =\cf4 \strokec4  os.getcwd()\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 # check the last folder in the path is cluster folder: the last 8 characters of the path should contain 'cluster'\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 if\cf4 \strokec4  cwd[\cf5 \strokec5 -\cf10 \strokec10 8\cf4 \strokec4 :].find(\cf9 \strokec9 'cluster'\cf4 \strokec4 ) \cf5 \strokec5 ==\cf4 \strokec4  \cf5 \strokec5 -\cf10 \strokec10 1\cf4 \strokec4 :\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     \cf7 \strokec7 #if not in cluster folder, change to cluster folder\cf4 \cb1 \strokec4 \
+\cb3     cwd\cf5 \strokec5 =\cf4 \strokec4 cwd\cf5 \strokec5 +\cf9 \strokec9 '/cluster'\cf4 \cb1 \strokec4 \
+\cb3     os.chdir(cwd)\cb1 \
+\cb3 exec_local_bash\cf5 \strokec5 =\cf4 \strokec4 cwd\cf5 \strokec5 +\cf9 \strokec9 '/cluster/run_local_highway.sh'\cf4 \cb1 \strokec4 \
+\cb3 SIM_PATH\cf5 \strokec5 =\cf4 \strokec4 cwd\cf5 \strokec5 +\cf9 \strokec9 '/local_sim/'\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 # *** BASIC PARAMS ***\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 tagBase\cf5 \strokec5 =\cf9 \strokec9 'Secenario1_MoreSims_Jan24'\cf4 \cb1 \strokec4 \
+\cb3 outputDir\cf5 \strokec5 =\cf9 \strokec9 './results/'\cf4 \cb1 \strokec4 \
+\
+\
+\cb3     \cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 if\cf4 \strokec4  run_cluster:\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     \cf2 \strokec2 if\cf4 \strokec4  cluster_save_DB:\cb1 \
+\cb3         cluster_save_DB_string\cf5 \strokec5 =\cf9 \strokec9 'true'\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 else\cf4 \strokec4 :\cb1 \
+\cb3         cluster_save_DB_string\cf5 \strokec5 =\cf9 \strokec9 'false'\cf4 \cb1 \strokec4 \
+\cb3     \cb1 \
+\cb3     DEL_LOCAL_SIMS \cf5 \strokec5 =\cf4 \strokec4  \cf6 \strokec6 False\cf4 \cb1 \strokec4 \
+\cb3     \cf7 \strokec7 #build apptainer image\cf4 \cb1 \strokec4 \
+\cb3     \cf7 \strokec7 #apptainer build --fakeroot --force ./runtime_ns3.sif ./runtime_ns3.def\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4  \cf6 \strokec6 not\cf4 \strokec4  skip_build:\cb1 \
+\cb3         \cf8 \strokec8 compile\cf4 \strokec4  \cf5 \strokec5 =\cf4 \strokec4  subprocess.Popen(\cf9 \strokec9 "bash ./build_container.sh"\cf4 \strokec4 ,\cf11 \strokec11 stdout\cf5 \strokec5 =\cf4 \strokec4 subprocess.PIPE,\cf11 \strokec11 shell\cf5 \strokec5 =\cf6 \strokec6 True\cf4 \strokec4 )\cb1 \
+\cb3         (output, err) \cf5 \strokec5 =\cf4 \strokec4  \cf8 \strokec8 compile\cf4 \strokec4 .communicate()\cb1 \
+\cb3         output_str \cf5 \strokec5 =\cf4 \strokec4  output.decode()\cb1 \
+\cb3         \cf8 \strokec8 print\cf4 \strokec4 (output_str)\cb1 \
+\cb3         \cf7 \strokec7 #check if compile was successful\cf4 \cb1 \strokec4 \
+\cb3         \cf7 \strokec7 #output_str should contian "Build complete: ./runtime_ns3.sif" or "Commit hash already present in sif_commit_hash.txt and runtime_ns3.sif file exists"\cf4 \cb1 \strokec4 \
+\cb3         \cf2 \strokec2 if\cf4 \strokec4  output_str.find(\cf9 \strokec9 "Container build succeeded"\cf4 \strokec4 ) \cf5 \strokec5 ==\cf4 \strokec4  \cf5 \strokec5 -\cf10 \strokec10 1\cf4 \strokec4  \cf6 \strokec6 and\cf4 \strokec4  output_str.find(\cf9 \strokec9 "Commit hash already present in sif_commit_hash.txt and runtime_ns3.sif file exists"\cf4 \strokec4 ) \cf5 \strokec5 ==\cf4 \strokec4  \cf5 \strokec5 -\cf10 \strokec10 1\cf4 \strokec4 :\cb1 \
+\cb3             \cf8 \strokec8 print\cf4 \strokec4 (\cf9 \strokec9 "APPTAINER BUILD ERROR stopping HERE"\cf4 \strokec4 )\cb1 \
+\cb3             \cf8 \strokec8 exit\cf4 \strokec4 ()\cb1 \
+\cb3     \cb1 \
+\cb3     \cf7 \strokec7 #create slurm args\cf4 \cb1 \strokec4 \
+\cb3     \cf7 \strokec7 #add job name and email\cf4 \cb1 \strokec4 \
+\cb3     slurm_args\cf5 \strokec5 =\cf4 \strokec4 [\cf9 \strokec9 '--job-name='\cf5 \strokec5 +\cf4 \strokec4 tagBase, \cf9 \strokec9 '--mail-type=ALL'\cf4 \strokec4 , \cf9 \strokec9 '--mail-user='\cf5 \strokec5 +\cf4 \strokec4 slurm_email]\cb1 \
+\cb3     \cf7 \strokec7 #if slur_partition exists and it is not empty, add it to slurm_args\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4  slurm_partition \cf6 \strokec6 and\cf4 \strokec4  slurm_partition.strip():\cb1 \
+\cb3         slurm_args.append(\cf9 \strokec9 '--partition='\cf5 \strokec5 +\cf4 \strokec4 slurm_partition)\cb1 \
+\cb3     \cf7 \strokec7 #if slurm_max_mem exists and it is not empty, add it to slurm_args\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4  slurm_max_mem \cf6 \strokec6 and\cf4 \strokec4  slurm_max_mem.strip():\cb1 \
+\cb3         slurm_args.append(\cf9 \strokec9 '--mem='\cf5 \strokec5 +\cf4 \strokec4 slurm_max_mem)\cb1 \
+\cb3     \cf7 \strokec7 #if slurm_max_time exists and it is not empty, add it to slurm_args\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4  slurm_max_time \cf6 \strokec6 and\cf4 \strokec4  slurm_max_time.strip():\cb1 \
+\cb3         slurm_args.append(\cf9 \strokec9 '--time='\cf5 \strokec5 +\cf4 \strokec4 slurm_max_time)\cb1 \
+\cb3     \cf7 \strokec7 #if slurm_n_tasks exists and it a positive integer, add it as a strig to slurm_args\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4  slurm_n_tasks \cf6 \strokec6 and\cf4 \strokec4  \cf12 \strokec12 str\cf4 \strokec4 (slurm_n_tasks).isdigit() \cf6 \strokec6 and\cf4 \strokec4  \cf12 \strokec12 int\cf4 \strokec4 (slurm_n_tasks)\cf5 \strokec5 >\cf10 \strokec10 0\cf4 \strokec4 :\cb1 \
+\cb3         slurm_args.append(\cf9 \strokec9 '--ntasks='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (slurm_n_tasks))\cb1 \
+\
+\cb3     \cf7 \strokec7 # Set the path and filename for the new bash file\cf4 \cb1 \strokec4 \
+\cb3     sbatch_submit_filename \cf5 \strokec5 =\cf4 \strokec4  \cf9 \strokec9 "sbatch_submit_jobs.sh"\cf4 \cb1 \strokec4 \
+\cb3     path \cf5 \strokec5 =\cf4 \strokec4  os.getcwd()\cf5 \strokec5 +\cf9 \strokec9 "/results_"\cf5 \strokec5 +\cf4 \strokec4 tagBase\cb1 \
+\cb3     \cf7 \strokec7 # create directory if it does not exist\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4  \cf6 \strokec6 not\cf4 \strokec4  os.path.exists(path):\cb1 \
+\cb3         os.makedirs(path)\cb1 \
+\
+\cb3     \cf7 \strokec7 # Check if the file exists\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4  os.path.exists(os.path.join(path, sbatch_submit_filename)):\cb1 \
+\cb3         \cf7 \strokec7 # If it exists, delete it\cf4 \cb1 \strokec4 \
+\cb3         os.remove(os.path.join(path, sbatch_submit_filename))\cb1 \
+\cb3     \cf7 \strokec7 # Open the file in write mode\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 with\cf4 \strokec4  \cf8 \strokec8 open\cf4 \strokec4 (os.path.join(path, sbatch_submit_filename), \cf9 \strokec9 "w"\cf4 \strokec4 ) \cf2 \strokec2 as\cf4 \strokec4  f:\cb1 \
+\cb3         \cf7 \strokec7 # Write the bash commands to the file\cf4 \cb1 \strokec4 \
+\cb3         f.write(\cf9 \strokec9 "#!/bin/bash\cf13 \strokec13 \\n\cf9 \strokec9 "\cf4 \strokec4 )\cb1 \
+\cb3         f.write(\cf9 \strokec9 "echo 'Submitting jobs!'\cf13 \strokec13 \\n\cf9 \strokec9 "\cf4 \strokec4 )\cb1 \
+\cb3         \cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 if\cf4 \strokec4  run_local:\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     \cf2 \strokec2 if\cf4 \strokec4  \cf6 \strokec6 not\cf4 \strokec4  skip_build:\cb1 \
+\cb3         \cf7 \strokec7 #configure ns3 - run ./ns3 configure -G Ninja --disable-examples --disable-werror -d optimized\cf4 \cb1 \strokec4 \
+\cb3         \cf8 \strokec8 compile\cf4 \strokec4  \cf5 \strokec5 =\cf4 \strokec4  subprocess.Popen(\cf9 \strokec9 "./ns3 configure -G Ninja --disable-examples --disable-werror -d optimized"\cf4 \strokec4 ,\cf11 \strokec11 stdout\cf5 \strokec5 =\cf4 \strokec4 subprocess.PIPE,\cf11 \strokec11 shell\cf5 \strokec5 =\cf6 \strokec6 True\cf4 \strokec4 )\cb1 \
+\cb3         (output, err) \cf5 \strokec5 =\cf4 \strokec4  \cf8 \strokec8 compile\cf4 \strokec4 .communicate()\cb1 \
+\cb3         output_str \cf5 \strokec5 =\cf4 \strokec4  output.decode()\cb1 \
+\cb3         \cf8 \strokec8 print\cf4 \strokec4 (output_str)\cb1 \
+\
+\cb3         \cf7 \strokec7 #compile ns3\cf4 \cb1 \strokec4 \
+\cb3         \cf8 \strokec8 compile\cf4 \strokec4  \cf5 \strokec5 =\cf4 \strokec4  subprocess.Popen(\cf9 \strokec9 "./ns3 build"\cf4 \strokec4 ,\cf11 \strokec11 stdout\cf5 \strokec5 =\cf4 \strokec4 subprocess.PIPE,\cf11 \strokec11 shell\cf5 \strokec5 =\cf6 \strokec6 True\cf4 \strokec4 )\cb1 \
+\cb3         (output, err) \cf5 \strokec5 =\cf4 \strokec4  \cf8 \strokec8 compile\cf4 \strokec4 .communicate()\cb1 \
+\cb3         output_str \cf5 \strokec5 =\cf4 \strokec4  output.decode()\cb1 \
+\cb3         \cf8 \strokec8 print\cf4 \strokec4 (output_str)\cb1 \
+\cb3         \cf7 \strokec7 #check if compile was successful\cf4 \cb1 \strokec4 \
+\cb3         \cf2 \strokec2 if\cf4 \strokec4  output_str.find(\cf9 \strokec9 "FAILED"\cf4 \strokec4 ) \cf5 \strokec5 !=\cf4 \strokec4  \cf5 \strokec5 -\cf10 \strokec10 1\cf4 \strokec4  \cf6 \strokec6 or\cf4 \strokec4  output_str.find(\cf9 \strokec9 "error:"\cf4 \strokec4 ) \cf5 \strokec5 !=\cf4 \strokec4  \cf5 \strokec5 -\cf10 \strokec10 1\cf4 \strokec4 :\cb1 \
+\cb3             \cf8 \strokec8 print\cf4 \strokec4 (\cf9 \strokec9 "COMPILE ERROR stopping HERE"\cf4 \strokec4 )\cb1 \
+\cb3             \cf8 \strokec8 exit\cf4 \strokec4 ()\cb1 \
+\cb3     \cb1 \
+\cb3     \cf2 \strokec2 import\cf4 \strokec4  joblib\cb1 \
+\cb3     \cf2 \strokec2 import\cf4 \strokec4  multiprocessing\cb1 \
+\cb3     \cf8 \strokec8 print\cf4 \strokec4 (\cf9 \strokec9 'Detected '\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (multiprocessing.cpu_count())\cf5 \strokec5 +\cf9 \strokec9 ' CPU cores'\cf4 \strokec4 )\cb1 \
+\cb3     results \cf5 \strokec5 =\cf4 \strokec4  \cf12 \strokec12 list\cf4 \strokec4 ()\cb1 \
+\cb3     args_list \cf5 \strokec5 =\cf4 \strokec4  \cf12 \strokec12 list\cf4 \strokec4 ()\cb1 \
+\cb3     \cf6 \strokec6 def\cf4 \strokec4  \cf8 \strokec8 exec_local_sim\cf4 \strokec4 (\cf11 \strokec11 args\cf4 \strokec4 ):\cb1 \
+\cb3         process \cf5 \strokec5 =\cf4 \strokec4  subprocess.Popen(args,\cf11 \strokec11 stdout\cf5 \strokec5 =\cf4 \strokec4 subprocess.PIPE,\cf11 \strokec11 stderr\cf5 \strokec5 =\cf4 \strokec4 subprocess.PIPE)\cb1 \
+\cb3         \cf2 \strokec2 return\cf4 \strokec4  process.stdout.readlines()\cb1 \
+\cb3         \cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 if\cf4 \strokec4  DEL_LOCAL_SIMS:\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     bashCommand \cf5 \strokec5 =\cf4 \strokec4  \cf9 \strokec9 "rm "\cf5 \strokec5 +\cf4 \strokec4 SIM_PATH\cf5 \strokec5 +\cf9 \strokec9 "*.txt"\cf4 \cb1 \strokec4 \
+\cb3     bashCommand2 \cf5 \strokec5 =\cf9 \strokec9 "rm "\cf5 \strokec5 +\cf4 \strokec4 SIM_PATH\cf5 \strokec5 +\cf9 \strokec9 "results/*"\cf4 \cb1 \strokec4 \
+\cb3     process \cf5 \strokec5 =\cf4 \strokec4  subprocess.run(bashCommand,\cb1 \
+\cb3     \cf11 \strokec11 check\cf5 \strokec5 =\cf6 \strokec6 False\cf4 \strokec4 , \cf11 \strokec11 text\cf5 \strokec5 =\cf6 \strokec6 True\cf4 \strokec4 , \cf11 \strokec11 shell\cf5 \strokec5 =\cf6 \strokec6 True\cf4 \strokec4 )\cb1 \
+\cb3     \cf8 \strokec8 print\cf4 \strokec4 (process.stdout)\cb1 \
+\cb3     \cf8 \strokec8 print\cf4 \strokec4 (process.stderr)\cb1 \
+\cb3     process \cf5 \strokec5 =\cf4 \strokec4  subprocess.run(bashCommand2,\cb1 \
+\cb3     \cf11 \strokec11 check\cf5 \strokec5 =\cf6 \strokec6 False\cf4 \strokec4 , \cf11 \strokec11 text\cf5 \strokec5 =\cf6 \strokec6 True\cf4 \strokec4 , \cf11 \strokec11 shell\cf5 \strokec5 =\cf6 \strokec6 True\cf4 \strokec4 )\cb1 \
+\cb3     \cf8 \strokec8 print\cf4 \strokec4 (process.stdout)\cb1 \
+\cb3     \cf8 \strokec8 print\cf4 \strokec4 (process.stderr)\cb1 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 #These are the parameters that can be varied\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3 \strokec9 """\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9 Program Options:\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --seed:                         change seed [59]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --run:                          change run number [1]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --logging:                      Enable logging [false]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --numVehiclesPerLane:           Number of vehicles per lane [5]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --numLanes:                     Total Number of lanes going from West to East [2]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --interVehicleDist:             inter-vehicle distance: it is the distance between the antenna position (located in the center) of two vehicles in the same lane [5]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --interLaneDist:                inter-lane distance: it is the distance between the antenna position (located in the center) of two vehicles in the adjacent lane [15]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --speed:                        speed of the vehicles in m/sec [38.8889]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --enableOneTxPerLane:           Per lane make one vehicle a transmitter. This option only workswith odd number of UEs per lane, which makes the middle vehiclein each lane a transmitter [false]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --useIPv6:                      Use IPv6 instead of IPv4 [false]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --packetSizeBe:                 packet size in bytes to be used by best effort traffic [300]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --dataRateBe:                   The data rate in kilobits per second for best effort traffic [16]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --simTime:                      Simulation time in seconds [+5s]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --slBearerActivationTime:       Sidelik bearer activation time in seconds [+2s]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --centralFrequencyBandSl:       The central frequency to be used for Sidelink band/channel [5.89e+09]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --bandwidthBandSl:              The system bandwidth to be used for Sidelink [400]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --txPower:                      total tx power in dBm [23]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --tddPattern:                   The TDD pattern string [UL|UL|UL|UL|UL|UL|UL|UL|UL|UL|]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --slBitMap:                     The Sidelink bitmap string [1|1|1|1|1|1|1|1|1|1]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --numerologyBwpSl:              The numerology to be used in Sidelink bandwidth part [0]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --slSensingWindow:              The Sidelink sensing window length in ms [100]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --slSelectionWindow:            The parameter which decides the minimum Sidelink selection window length in physical slots. T2min = slSelectionWindow * 2^numerology [5]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --slSubchannelSize:             The Sidelink subchannel size in RBs [50]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --slMaxNumPerReserve:           The parameter which indicates the maximum number of reserved PSCCH/PSSCH resources that can be indicated by an SCI. [3]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --slProbResourceKeep:           The parameter which indicates the probability with which the UE keeps the current resource when the resource reselectioncounter reaches zero. [0]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --slMaxTxTransNumPssch:         The parameter which indicates the maximum transmission number (including new transmission and retransmission) for PSSCH. [3]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --ReservationPeriod:            The resource reservation period in ms [100]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --t1:                           The start of the selection window in physical slots, accounting for physical layer processing delay [2]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --t2:                           The end of the selection window in physical slots [33]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --slThresPsschRsrp:             A threshold in dBm used for sensing based UE autonomous resource selection [-128]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --enableChannelRandomness:      Enable shadowing and channel updates [false]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --channelUpdatePeriod:          The channel update period in ms [500]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --mcs:                          The MCS to used for sidelink []\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --outputDir:                    directory where to store simulation results [./]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --simTag:                       tag identifying the simulation campaigns [default]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --generateInitialPosGnuScript:  generate gnuplot script to plot initial positions of the UEs [true]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --generateGifGnuScript:         generate gnuplot script to generate GIF to show UEs mobility [true]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --globalScheduler:              true - enables the HHI Global scheduler; false - simple (sensing) scheduler is used [true]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --globalModeSingleSubchannel:   true - restricts the HHI Global scheduler to only use one subchannel per Resource Assignment [false]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --TwoWay_Highway:               true - enables the a bothsides highway [true]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --enableGroups:                 Enables the use of groups for scheduling and sensing [true]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --glSchedGroupBitMap:           The bitmap of the groups that use the global scheduler, as a bitmap string. Only active if enableGroups is true [1|1|0]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --sensingGroupBitMap:           The bitmap of the groups that have sensing enabled, as a bitmap string. Only active if enableGroups is true [0|0|1]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --distributionMean:             Exponential distribution Mean to select slots from the list. [0.1]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --v2x_kpi:                      Range applied for the V2x KPIs [2000]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9     --numRandomVehicles:            Number of randomly placed vehicles [100]\cf4 \cb1 \strokec4 \
+\cf9 \cb3 \strokec9 """\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 #Here we define the parameters of the simulation\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 seed_start\cf5 \strokec5 =\cf10 \strokec10 1\cf4 \cb1 \strokec4 \
+\cb3 seed_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 100\cf4 \strokec4 ] \cf7 \strokec7 #only enter one number: will run the simulation with seeds from seed 1 to seed_range\cf4 \cb1 \strokec4 \
+\cb3 simTime_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 60\cf4 \strokec4 ] \cf7 \strokec7 #120s\cf4 \cb1 \strokec4 \
+\cb3 numLanes_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 2\cf4 \strokec4 ]\cb1 \
+\cb3 enableChannelRandomness_range\cf5 \strokec5 =\cf4 \strokec4 [\cf9 \strokec9 'true'\cf4 \strokec4 ]\cb1 \
+\cb3 numVehiclesPerLane_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 10\cf4 \strokec4 ]\cb1 \
+\cb3 enableOneTxPerLane_range\cf5 \strokec5 =\cf4 \strokec4 [\cf9 \strokec9 'false'\cf4 \strokec4 ]\cb1 \
+\cb3 slMaxTxTransNumPssch_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 3\cf4 \strokec4 ] \cf7 \strokec7 #slMaxTxTransNumPssch_range=[2,5,10]\cf4 \cb1 \strokec4 \
+\cb3 numerologyBwpSl_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 0\cf4 \strokec4 ]\cf7 \strokec7 #numerologyBwpSl_range=[0,1,2]\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 #numerologyBwpSl_range=[0,1,2] Check the subchanels , distribution on time\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 mcs_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 14\cf4 \strokec4 ] \cf7 \strokec7 #mcs_range=[4,7,14,20,28]\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 #mcs_range=[14,20,28]\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 packetSizeBe_range \cf5 \strokec5 =\cf4 \strokec4  [\cf10 \strokec10 300\cf4 \strokec4 ] \cf7 \strokec7 # 200 is standard\cf4 \cb1 \strokec4 \
+\cb3 dataRateBe_range \cf5 \strokec5 =\cf4 \strokec4  [\cf10 \strokec10 24\cf4 \strokec4 ]  \cf7 \strokec7 #16 kilobits per second\cf4 \cb1 \strokec4 \
+\cb3 t1_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 2\cf4 \strokec4 ]\cb1 \
+\cb3 t2_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 32\cf4 \strokec4 ]\cb1 \
+\cb3 globalScheduler_range \cf5 \strokec5 =\cf4 \strokec4  [\cf9 \strokec9 'true'\cf4 \strokec4 ]\cb1 \
+\cb3 globalModeSingleSubchannel_range \cf5 \strokec5 =\cf4 \strokec4  [\cf9 \strokec9 'true'\cf4 \strokec4 ]\cb1 \
+\cb3 ReservationPeriod_range \cf5 \strokec5 =\cf4 \strokec4  [\cf10 \strokec10 50\cf4 \strokec4 ]\cb1 \
+\cb3 centralFrequencyBandSl_range \cf5 \strokec5 =\cf4 \strokec4  [\cf10 \strokec10 5.89e9\cf4 \strokec4 ] \cf7 \strokec7 # band n47  TDD //Here band is analogous to channel\cf4 \cb1 \strokec4 \
+\cb3 bandwidthBandSl_range \cf5 \strokec5 =\cf4 \strokec4  [\cf10 \strokec10 400\cf4 \strokec4 ] \cf7 \strokec7 #Multiple of 100 KHz; 400 = 40 MHz\cf4 \cb1 \strokec4 \
+\cb3 txPower_range \cf5 \strokec5 =\cf4 \strokec4  [\cf10 \strokec10 23\cf4 \strokec4 ] \cf7 \strokec7 # dBm\cf4 \cb1 \strokec4 \
+\cb3 speed_range \cf5 \strokec5 =\cf4 \strokec4  [\cf10 \strokec10 0\cf4 \strokec4 ] \cf7 \strokec7 # 38.88889 meter per second, default 140 km/h\cf4 \cb1 \strokec4 \
+\cb3 enableGroups_range \cf5 \strokec5 =\cf4 \strokec4  [\cf9 \strokec9 'true'\cf4 \strokec4 ]\cb1 \
+\cb3 glSchedGroupBitMap_range \cf5 \strokec5 =\cf4 \strokec4  [\cf9 \strokec9 "1\\|1\\|0"\cf4 \strokec4 ]\cb1 \
+\cb3 sensingGroupBitMap_range \cf5 \strokec5 =\cf4 \strokec4  [\cf9 \strokec9 "0\\|0\\|1"\cf4 \strokec4 ]\cb1 \
+\cb3 v2x_kpi_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 2000\cf4 \strokec4 ]\cb1 \
+\cb3 distributionMean_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 1\cf4 \strokec4 ]\cb1 \
+\cb3 interLaneDist_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 4\cf4 \strokec4 ]\cb1 \
+\cb3 interVehicleDist_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 10\cf4 \strokec4 ,\cf10 \strokec10 15\cf4 \strokec4 ,\cf10 \strokec10 20\cf4 \strokec4 ,\cf10 \strokec10 25\cf4 \strokec4 ,\cf10 \strokec10 30\cf4 \strokec4 ,\cf10 \strokec10 35\cf4 \strokec4 ,\cf10 \strokec10 40\cf4 \strokec4 ,\cf10 \strokec10 45\cf4 \strokec4 ,\cf10 \strokec10 50\cf4 \strokec4 ]\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 #interVehicleDist_range=[5]\cf4 \cb1 \strokec4 \
+\cf7 \cb3 \strokec7 #numRandomVehicles_range=[1,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170]\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 numRandomVehicles_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 1\cf4 \strokec4 ,\cf10 \strokec10 20\cf4 \strokec4 ,\cf10 \strokec10 40\cf4 \strokec4 ,\cf10 \strokec10 60\cf4 \strokec4 ,\cf10 \strokec10 80\cf4 \strokec4 ,\cf10 \strokec10 100\cf4 \strokec4 ,\cf10 \strokec10 130\cf4 \strokec4 ,\cf10 \strokec10 160\cf4 \strokec4 ,\cf10 \strokec10 170\cf4 \strokec4 ]\cb1 \
+\cb3 TwoWay_Highway_range\cf5 \strokec5 =\cf4 \strokec4 [\cf9 \strokec9 'true'\cf4 \strokec4 ]\cb1 \
+\cb3 channelUpdatePeriod_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 50\cf4 \strokec4 ]\cb1 \
+\cb3 dataRateRandomUE_range\cf5 \strokec5 =\cf4 \strokec4 [\cf10 \strokec10 48\cf4 \strokec4 ]\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 #dataRateRandomUE_range=[12,24,48,96]\cf4 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 if\cf4 \strokec4  run_cluster:\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     \cf7 \strokec7 #generate seed_range from 1 to seed_range\cf4 \cb1 \strokec4 \
+\cb3     seed_range\cf5 \strokec5 =\cf8 \strokec8 range\cf4 \strokec4 (seed_start,seed_range[\cf10 \strokec10 0\cf4 \strokec4 ]\cf5 \strokec5 +\cf4 \strokec4 seed_start)\cb1 \
+\cb3     \cf7 \strokec7 #seed_range to list\cf4 \cb1 \strokec4 \
+\cb3     seed_range\cf5 \strokec5 =\cf12 \strokec12 list\cf4 \strokec4 (seed_range)\cb1 \
+\cb3     \cf8 \strokec8 print\cf4 \strokec4 (seed_range)\cb1 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf7 \cb3 \strokec7 #generate all combinations of parameters\cf4 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3 sets \cf5 \strokec5 =\cf4 \strokec4  \cf12 \strokec12 list\cf4 \strokec4 (product(seed_range,simTime_range, numLanes_range, enableChannelRandomness_range, numVehiclesPerLane_range, enableOneTxPerLane_range, slMaxTxTransNumPssch_range, numerologyBwpSl_range, mcs_range, t1_range, t2_range, globalScheduler_range,globalModeSingleSubchannel_range,packetSizeBe_range,dataRateBe_range,ReservationPeriod_range,centralFrequencyBandSl_range,bandwidthBandSl_range,txPower_range,speed_range,enableGroups_range,glSchedGroupBitMap_range,sensingGroupBitMap_range,v2x_kpi_range,distributionMean_range,interLaneDist_range,interVehicleDist_range,numRandomVehicles_range,TwoWay_Highway_range,channelUpdatePeriod_range,dataRateRandomUE_range))\cb1 \
+\cb3 run\cf5 \strokec5 =\cf10 \strokec10 0\cf4 \cb1 \strokec4 \
+\cb3 sets.sort()\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 for\cf4 \strokec4  \cf12 \strokec12 set\cf4 \strokec4  \cf2 \strokec2 in\cf4 \strokec4  sets:\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     \cb1 \
+\cb3     seed\cf5 \strokec5 =\cf4 \strokec4 set[\cf10 \strokec10 0\cf4 \strokec4 ]\cb1 \
+\cb3     simTime\cf5 \strokec5 =\cf4 \strokec4 set[\cf10 \strokec10 1\cf4 \strokec4 ]\cb1 \
+\cb3     numLanes\cf5 \strokec5 =\cf4 \strokec4 set[\cf10 \strokec10 2\cf4 \strokec4 ]\cb1 \
+\cb3     enableChannelRandomness\cf5 \strokec5 =\cf4 \strokec4 set[\cf10 \strokec10 3\cf4 \strokec4 ]\cb1 \
+\cb3     numVehiclesPerLane\cf5 \strokec5 =\cf4 \strokec4 set[\cf10 \strokec10 4\cf4 \strokec4 ]\cb1 \
+\cb3     enableOneTxPerLane\cf5 \strokec5 =\cf4 \strokec4 set[\cf10 \strokec10 5\cf4 \strokec4 ]\cb1 \
+\cb3     slMaxTxTransNumPssch\cf5 \strokec5 =\cf4 \strokec4 set[\cf10 \strokec10 6\cf4 \strokec4 ]\cb1 \
+\cb3     numerologyBwpSl\cf5 \strokec5 =\cf4 \strokec4 set[\cf10 \strokec10 7\cf4 \strokec4 ]\cb1 \
+\cb3     mcs\cf5 \strokec5 =\cf4 \strokec4 set[\cf10 \strokec10 8\cf4 \strokec4 ]\cb1 \
+\cb3     t1\cf5 \strokec5 =\cf4 \strokec4 set[\cf10 \strokec10 9\cf4 \strokec4 ]\cb1 \
+\cb3     t2\cf5 \strokec5 =\cf4 \strokec4 set[\cf10 \strokec10 10\cf4 \strokec4 ]\cb1 \
+\cb3     globalScheduler \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 11\cf4 \strokec4 ]\cb1 \
+\cb3     globalModeSingleSubchannel \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 12\cf4 \strokec4 ]\cb1 \
+\cb3     packetSizeBe \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 13\cf4 \strokec4 ]\cb1 \
+\cb3     dataRateBe \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 14\cf4 \strokec4 ]\cb1 \
+\cb3     ReservationPeriod \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 15\cf4 \strokec4 ]\cb1 \
+\cb3     centralFrequencyBandSl \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 16\cf4 \strokec4 ]\cb1 \
+\cb3     bandwidthBandSl \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 17\cf4 \strokec4 ]\cb1 \
+\cb3     txPower\cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 18\cf4 \strokec4 ]\cb1 \
+\cb3     speed \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 19\cf4 \strokec4 ]\cb1 \
+\cb3     enableGroups \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 20\cf4 \strokec4 ]\cb1 \
+\cb3     glSchedGroupBitMap \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 21\cf4 \strokec4 ]\cb1 \
+\cb3     sensingGroupBitMap \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 22\cf4 \strokec4 ]\cb1 \
+\cb3     v2x_kpi \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 23\cf4 \strokec4 ]\cb1 \
+\cb3     distributionMean \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 24\cf4 \strokec4 ]\cb1 \
+\cb3     interLaneDist \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 25\cf4 \strokec4 ]\cb1 \
+\cb3     interVehicleDist \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 26\cf4 \strokec4 ]\cb1 \
+\cb3     numRandomVehicles \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 27\cf4 \strokec4 ]\cb1 \
+\cb3     TwoWay_Highway \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 28\cf4 \strokec4 ]\cb1 \
+\cb3     channelUpdatePeriod \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 29\cf4 \strokec4 ]\cb1 \
+\cb3     dataRateRandomUE \cf5 \strokec5 =\cf4 \strokec4  set[\cf10 \strokec10 30\cf4 \strokec4 ]\cb1 \
+\cb3     \cf7 \strokec7 #print(set)\cf4 \cb1 \strokec4 \
+\cb3     valid_sim \cf5 \strokec5 =\cf4 \strokec4  \cf6 \strokec6 True\cf4 \cb1 \strokec4 \
+\
+\cb3     \cf7 \strokec7 #\cf4 \cb1 \strokec4 \
+\cb3     \cf7 \strokec7 #get rid of non sensical sets\cf4 \cb1 \strokec4 \
+\cb3     \cf7 \strokec7 #\cf4 \cb1 \strokec4 \
+\cb3     \cb1 \
+\cb3     \cf7 \strokec7 # if glSchedGroupBitMap is "1\\|0\\|0" and sensingGroupBitMap is not "0\\|1\\|1" then the simulation is not valid\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4  (glSchedGroupBitMap \cf5 \strokec5 ==\cf4 \strokec4  \cf9 \strokec9 "1\\|0\\|0"\cf4 \strokec4  \cf6 \strokec6 and\cf4 \strokec4  sensingGroupBitMap \cf5 \strokec5 !=\cf4 \strokec4  \cf9 \strokec9 "0\\|1\\|1"\cf4 \strokec4 ):\cb1 \
+\cb3         valid_sim \cf5 \strokec5 =\cf4 \strokec4  \cf6 \strokec6 False\cf4 \cb1 \strokec4 \
+\
+\cb3     \cf7 \strokec7 # distributionMean is not used if globalScheduler is false\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4  (globalScheduler \cf5 \strokec5 ==\cf4 \strokec4  \cf9 \strokec9 'false'\cf4 \strokec4  \cf6 \strokec6 and\cf4 \strokec4  distributionMean \cf5 \strokec5 !=\cf4 \strokec4  distributionMean_range[\cf10 \strokec10 0\cf4 \strokec4 ]):\cb1 \
+\cb3         valid_sim \cf5 \strokec5 =\cf4 \strokec4  \cf6 \strokec6 False\cf4 \cb1 \strokec4 \
+\cb3         \cb1 \
+\cb3     \cf7 \strokec7 #if glSchedGroupBitMap does not contain a 1, distributionMean is not used\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4  (\cf9 \strokec9 "1"\cf4 \strokec4  \cf6 \strokec6 not\cf4 \strokec4  \cf6 \strokec6 in\cf4 \strokec4  glSchedGroupBitMap \cf6 \strokec6 and\cf4 \strokec4  distributionMean \cf5 \strokec5 !=\cf4 \strokec4  distributionMean_range[\cf10 \strokec10 0\cf4 \strokec4 ]):\cb1 \
+\cb3         valid_sim \cf5 \strokec5 =\cf4 \strokec4  \cf6 \strokec6 False\cf4 \cb1 \strokec4 \
+\cb3     \cb1 \
+\cb3     \cf7 \strokec7 #if glSchedGroupBitMap does not contain a 0, sensingGroupBitMap is not used\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4  (\cf9 \strokec9 "0"\cf4 \strokec4  \cf6 \strokec6 not\cf4 \strokec4  \cf6 \strokec6 in\cf4 \strokec4  glSchedGroupBitMap \cf6 \strokec6 and\cf4 \strokec4  \cf9 \strokec9 "1"\cf4 \strokec4  \cf6 \strokec6 in\cf4 \strokec4  sensingGroupBitMap):\cb1 \
+\cb3         valid_sim \cf5 \strokec5 =\cf4 \strokec4  \cf6 \strokec6 False\cf4 \cb1 \strokec4 \
+\cb3     \cb1 \
+\cb3     \cf2 \strokec2 if\cf4 \strokec4 (valid_sim):\cb1 \
+\cb3         run\cf5 \strokec5 +=\cf10 \strokec10 1\cf4 \cb1 \strokec4 \
+\cb3         sim_args\cf5 \strokec5 =\cf4 \strokec4 [\cf9 \strokec9 '--seed='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (seed),\cb1 \
+\cb3         \cf9 \strokec9 '--simTime='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (simTime),\cb1 \
+\cb3         \cf9 \strokec9 '--numLanes='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (numLanes),\cb1 \
+\cb3         \cf9 \strokec9 '--enableChannelRandomness='\cf5 \strokec5 +\cf4 \strokec4 enableChannelRandomness,\cb1 \
+\cb3         \cf9 \strokec9 '--numVehiclesPerLane='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (numVehiclesPerLane),\cb1 \
+\cb3         \cf9 \strokec9 '--enableOneTxPerLane='\cf5 \strokec5 +\cf4 \strokec4 enableOneTxPerLane,\cb1 \
+\cb3         \cf9 \strokec9 '--slMaxTxTransNumPssch='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (slMaxTxTransNumPssch),\cb1 \
+\cb3         \cf9 \strokec9 '--numerologyBwpSl='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (numerologyBwpSl),\cb1 \
+\cb3         \cf9 \strokec9 '--mcs='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (mcs),\cb1 \
+\cb3         \cf9 \strokec9 '--t1='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (t1),\cb1 \
+\cb3         \cf9 \strokec9 '--t2='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (t2),\cb1 \
+\cb3         \cf9 \strokec9 '--globalScheduler='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (globalScheduler),\cb1 \
+\cb3         \cf9 \strokec9 '--globalModeSingleSubchannel='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (globalModeSingleSubchannel),\cb1 \
+\cb3         \cf9 \strokec9 '--packetSizeBe='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (packetSizeBe),\cb1 \
+\cb3         \cf9 \strokec9 '--dataRateBe='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (dataRateBe),\cb1 \
+\cb3         \cf9 \strokec9 '--ReservationPeriod='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (ReservationPeriod),\cb1 \
+\cb3         \cf9 \strokec9 '--centralFrequencyBandSl='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (centralFrequencyBandSl),\cb1 \
+\cb3         \cf9 \strokec9 '--bandwidthBandSl='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (bandwidthBandSl),\cb1 \
+\cb3         \cf9 \strokec9 '--txPower='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (txPower),\cb1 \
+\cb3         \cf9 \strokec9 '--speed='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (speed),\cb1 \
+\cb3         \cf9 \strokec9 '--enableGroups='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (enableGroups)]\cb1 \
+\cb3         \cf2 \strokec2 if\cf4 \strokec4 (enableGroups\cf5 \strokec5 ==\cf9 \strokec9 'true'\cf4 \strokec4 ):\cb1 \
+\cb3             sim_args\cf5 \strokec5 =\cf4 \strokec4 sim_args\cf5 \strokec5 +\cf4 \strokec4 [\cb1 \
+\cb3             \cf9 \strokec9 '--glSchedGroupBitMap='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (glSchedGroupBitMap),\cb1 \
+\cb3             \cf9 \strokec9 '--sensingGroupBitMap='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (sensingGroupBitMap)]\cb1 \
+\cb3         sim_args\cf5 \strokec5 =\cf4 \strokec4 sim_args\cf5 \strokec5 +\cf4 \strokec4 [\cb1 \
+\cb3         \cf9 \strokec9 '--v2x_kpi='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (v2x_kpi),\cb1 \
+\cb3         \cf9 \strokec9 '--distributionMean='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (distributionMean),\cb1 \
+\cb3         \cf9 \strokec9 '--interLaneDist='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (interLaneDist),\cb1 \
+\cb3         \cf9 \strokec9 '--interVehicleDist='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (interVehicleDist),\cb1 \
+\cb3         \cf9 \strokec9 '--numRandomVehicles='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (numRandomVehicles),\cb1 \
+\cb3         \cf9 \strokec9 '--TwoWay_Highway='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (TwoWay_Highway),\cb1 \
+\cb3         \cf9 \strokec9 '--channelUpdatePeriod='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (channelUpdatePeriod),\cb1 \
+\cb3         \cf9 \strokec9 '--dataRateRandomUE='\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (dataRateRandomUE)]\cb1 \
+\cb3         \cf7 \strokec7 #calc hash to make db file unique\cf4 \cb1 \strokec4 \
+\cb3         \cf7 \strokec7 #sim_args to string without first element\cf4 \cb1 \strokec4 \
+\cb3         sim_args_str\cf5 \strokec5 =\cf12 \strokec12 str\cf4 \strokec4 (sim_args[\cf10 \strokec10 1\cf4 \strokec4 :]).encode(\cf9 \strokec9 'utf-8'\cf4 \strokec4 )\cb1 \
+\cb3         hasher \cf5 \strokec5 =\cf4 \strokec4  hashlib.sha1(sim_args_str)\cb1 \
+\cb3         hash_str\cf5 \strokec5 =\cf4 \strokec4 hasher.hexdigest()\cb1 \
+\cb3         \cf7 \strokec7 #make args\cf4 \cb1 \strokec4 \
+\cb3     \cb1 \
+\cb3         \cf2 \strokec2 if\cf4 \strokec4  run_cluster:\cb1 \
+\cb3             args\cf5 \strokec5 =\cf4 \strokec4 [\cf9 \strokec9 'sbatch'\cf4 \strokec4 ]\cf5 \strokec5 +\cf4 \strokec4 slurm_args\cf5 \strokec5 +\cf4 \strokec4 [\cf9 \strokec9 '../run_slurm_highway.sh'\cf4 \strokec4 ,\cf9 \strokec9 '--keepDatabase='\cf5 \strokec5 +\cf4 \strokec4 cluster_save_DB_string,\cf9 \strokec9 '--simTag='\cf5 \strokec5 +\cf4 \strokec4 tagBase\cf5 \strokec5 +\cf9 \strokec9 '-'\cf5 \strokec5 +\cf4 \strokec4 hash_str[\cf10 \strokec10 0\cf4 \strokec4 :\cf10 \strokec10 10\cf4 \strokec4 ]]\cf5 \strokec5 +\cf4 \strokec4 sim_args\cb1 \
+\cb3         \cf2 \strokec2 if\cf4 \strokec4  run_local:\cb1 \
+\cb3             args\cf5 \strokec5 =\cf4 \strokec4 [exec_local_bash,\cf9 \strokec9 '--simTag='\cf5 \strokec5 +\cf4 \strokec4 tagBase\cf5 \strokec5 +\cf9 \strokec9 '-'\cf5 \strokec5 +\cf4 \strokec4 hash_str[\cf10 \strokec10 0\cf4 \strokec4 :\cf10 \strokec10 10\cf4 \strokec4 ]]\cf5 \strokec5 +\cf4 \strokec4 sim_args\cb1 \
+\cb3         \cf2 \strokec2 if\cf4 \strokec4  just_testing:\cb1 \
+\cb3             \cf8 \strokec8 print\cf4 \strokec4 (args)\cb1 \
+\cb3         \cf2 \strokec2 else\cf4 \strokec4 :\cb1 \
+\cb3             \cf7 \strokec7 #Start Simulations\cf4 \cb1 \strokec4 \
+\cb3             \cf2 \strokec2 if\cf4 \strokec4  run_cluster:\cb1 \
+\cb3                 \cf2 \strokec2 with\cf4 \strokec4  \cf8 \strokec8 open\cf4 \strokec4 (os.path.join(path, sbatch_submit_filename), \cf9 \strokec9 "a"\cf4 \strokec4 ) \cf2 \strokec2 as\cf4 \strokec4  f:\cb1 \
+\cb3                     \cf7 \strokec7 # Write args to the file with a space between each arg\cf4 \cb1 \strokec4 \
+\cb3                     f.write(\cf9 \strokec9 " "\cf4 \strokec4 .join(args))\cb1 \
+\cb3                     \cf7 \strokec7 # Add a newline character to the end of the line\cf4 \cb1 \strokec4 \
+\cb3                     f.write(\cf9 \strokec9 "\cf13 \strokec13 \\n\cf9 \strokec9 "\cf4 \strokec4 )\cb1 \
+\cb3                     \cb1 \
+\cb3             \cf2 \strokec2 if\cf4 \strokec4  run_local:\cb1 \
+\cb3                 \cf7 \strokec7 #collect args\cf4 \cb1 \strokec4 \
+\cb3                 args_list.append(args)\cb1 \
+\
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 if\cf4 \strokec4  run_local:\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     \cf7 \strokec7 #start local sims\cf4 \cb1 \strokec4 \
+\cb3     \cf8 \strokec8 print\cf4 \strokec4 (\cf9 \strokec9 'Starting '\cf5 \strokec5 +\cf4 \strokec4  \cf12 \strokec12 str\cf4 \strokec4 (run)\cf5 \strokec5 +\cf9 \strokec9 ' local sims'\cf4 \strokec4 )\cb1 \
+\cb3     \cf7 \strokec7 #Print current time\cf4 \cb1 \strokec4 \
+\cb3     now \cf5 \strokec5 =\cf4 \strokec4  datetime.now()\cb1 \
+\cb3     \cf7 \strokec7 #shuffle args_list\cf4 \cb1 \strokec4 \
+\cb3     \cf2 \strokec2 import\cf4 \strokec4  random\cb1 \
+\cb3     random.shuffle(args_list)\cb1 \
+\
+\cb3     \cf7 \strokec7 #print(args_list)\cf4 \cb1 \strokec4 \
+\cb3     results \cf5 \strokec5 =\cf4 \strokec4  joblib.Parallel(\cf11 \strokec11 n_jobs\cf5 \strokec5 =\cf8 \strokec8 max\cf4 \strokec4 (\cf10 \strokec10 1\cf4 \strokec4 ,multiprocessing.cpu_count()\cf5 \strokec5 -\cf10 \strokec10 2\cf4 \strokec4 ),\cf11 \strokec11 prefer\cf5 \strokec5 =\cf9 \strokec9 'processes'\cf4 \strokec4 ,\cf11 \strokec11 verbose\cf5 \strokec5 =\cf10 \strokec10 11\cf4 \strokec4 )(joblib.delayed(exec_local_sim)(args) \cf2 \strokec2 for\cf4 \strokec4  args \cf2 \strokec2 in\cf4 \strokec4  args_list)\cb1 \
+\cb3     \cf7 \strokec7 #calulate time\cf4 \cb1 \strokec4 \
+\cb3     time_elapsed \cf5 \strokec5 =\cf4 \strokec4  datetime.now() \cf5 \strokec5 -\cf4 \strokec4  now\cb1 \
+\cb3     \cb1 \
+\cb3         \cb1 \
+\
+\cb3     \cf8 \strokec8 print\cf4 \strokec4 (results)\cb1 \
+\cb3     \cf8 \strokec8 print\cf4 \strokec4 (\cf9 \strokec9 'Time elapsed (hh:mm:ss) \cf6 \strokec6 \{\}\cf9 \strokec9 '\cf4 \strokec4 .format(time_elapsed))\cb1 \
+\cb3     \cf8 \strokec8 print\cf4 \strokec4 (\cf9 \strokec9 "ALL DONE: "\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (run)\cf5 \strokec5 +\cf4 \strokec4  \cf9 \strokec9 " Simulations started"\cf4 \strokec4 )\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 if\cf4 \strokec4  just_testing:\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     \cf8 \strokec8 print\cf4 \strokec4 (\cf9 \strokec9 'NOTHING WAS STARTED: JUST TESTING = TRUE'\cf4 \strokec4 )\cb1 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 if\cf4 \strokec4  run_cluster:\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb3     \cf8 \strokec8 print\cf4 \strokec4 (\cf9 \strokec9 "ALL DONE: "\cf5 \strokec5 +\cf12 \strokec12 str\cf4 \strokec4 (run)\cf5 \strokec5 +\cf4 \strokec4  \cf9 \strokec9 " Simulations added to sbatch_submit_jobs.sh"\cf4 \strokec4 )\cb1 \
+\cb3     \cf8 \strokec8 print\cf4 \strokec4 (\cf9 \strokec9 "Run sbatch_submit_jobs.sh to start simulations"\cf4 \strokec4 )\cb1 \
+\
+}
